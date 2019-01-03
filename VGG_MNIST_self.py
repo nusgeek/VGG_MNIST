@@ -74,12 +74,13 @@ class VGG(nn.Module):
         x = self.dense3(self.drop2(F.relu(self.dense2(self.drop1(F.relu(self.dense1(x)))))))
         return x
 
-
+# 3. initialize nn
 net = VGG().cuda()
 # print(net)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=momentum)
 
+# get standard dataset
 train_loader, test_loader = getData()
 
 # # show image
@@ -89,7 +90,7 @@ train_loader, test_loader = getData()
 #     plt.imshow(np.transpose(npimg, (1, 2, 0)))
 #     plt.show()
 
-
+# 4. define training and testing process
 train_losses = []
 train_counter = []
 test_losses = []
@@ -122,7 +123,7 @@ def train(epoch):
     time_e = time.time()
     print('Train time in EPOCH %d is %ds' % (epoch, time_e - time_s))
 
-
+    
 def test():
     net.eval()
     test_loss = 0
@@ -140,7 +141,7 @@ def test():
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
-
+# 5. start training and testing
 test()
 for epoch in range(1, EPOCH + 1):
     train(epoch)
